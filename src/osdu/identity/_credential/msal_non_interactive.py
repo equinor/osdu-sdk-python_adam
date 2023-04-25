@@ -6,9 +6,9 @@
 """Base client for authentication and communicating with OSDU."""
 
 import logging
-
-from .base import OsduBaseCredential
 from msal import ConfidentialClientApplication
+from .base import OsduBaseCredential
+
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +86,9 @@ class OsduMsalNonInteractiveCredential(OsduBaseCredential):
         return access_token.
         """
         token = self._get_token()
-        if 'access_token' in token:
-            return token['access_token']
+        if 'access_token' not in token:
+            print("Failed to get token")
+        return token['access_token']
 
     def _get_token(self) -> dict:
         """Get token using msal confidential client.
@@ -97,4 +98,5 @@ class OsduMsalNonInteractiveCredential(OsduBaseCredential):
         """
         result = self._msal_confidential_client.acquire_token_silent([self._scopes], account=None)
         if not result:
-            return self._msal_confidential_client.acquire_token_for_client([self._scopes])
+            result = self._msal_confidential_client.acquire_token_for_client([self._scopes])
+        return result

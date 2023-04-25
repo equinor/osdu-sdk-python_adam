@@ -211,7 +211,9 @@ class OsduMsalDeviceCode(OsduMsalInteractiveCredentialBase):
 
 
 class OsduMsalOnBehalfOf(OsduBaseCredential):
+    """MSAL on-behalf-of flow."""
     # pylint: disable=too-many-arguments
+
     def __init__(
             self, interactive_client: OsduMsalInteractiveCredential | OsduMsalDeviceCode,
             client_secret: str, osdu_resource_id: str):
@@ -232,20 +234,21 @@ class OsduMsalOnBehalfOf(OsduBaseCredential):
     def _user_impersonation_scope(self) -> str:
         return f"api://{self._osdu_resource_id}/user_impersonation"
 
-    def _get_middle_tier_token(self) -> str:
+    def get_middle_tier_token(self) -> str:
+        """Get mid tier token to use for OBO """
         return self._interactive_client.get_token()
 
     def get_token(self, **kwargs) -> str:
         conf = {
             "grant_type": 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            "assertion": self._get_middle_tier_token(),
+            "assertion": self.get_middle_tier_token(),
             "client_id": self._interactive_client.client_id,
             "client_secret": self._client_secret,
             "resource": self._osdu_resource_id,
             "requested_token_use": 'on_behalf_of',
             "scope": 'openid user_impersonation'
         }
-        res = requests.post(f"{self._interactive_client.authority}/oauth2/token", conf)
+        res = requests.post(f"{self._interactive_client.authority}/oauth2/token", conf, timeout=30)
         if res.status_code != 200:
             print(res.text)
         return res.json()["access_token"]
