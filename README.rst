@@ -10,7 +10,12 @@ Note: This is currently a WIP so will be subject to breaking changes.
 
 Change Log
 ==========
-                   
+0.0.14
+------
+
+- Add device code flow
+- Add on-behalf-of flow
+
 0.0.12
 ------
 
