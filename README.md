@@ -31,10 +31,10 @@ If you want to modify the sdk code then see the [development wiki](https://githu
 
 ```
 from osdu.client import OsduClient
-from osdu.identity import OsduTokenCredential, OsduMsalInteractiveCredential, OsduEnvironmentCredential
+from osdu.identity import OsduTokenCredential, OsduMsalInteractiveCredential, OsduMsalDeviceCodeCredential, OsduEnvironmentCredential
 ```
 
-2. Create an instance of OsduTokenCredential, OsduMsalInteractiveCredential, OsduEnvironmentCredential or your own custom class.
+2. Create an instance of OsduTokenCredential, OsduMsalInteractiveCredential, OsduMsalDeviceCodeCredential, OsduEnvironmentCredential or your own custom class.
 
 ```
 credential = OsduMsalInteractiveCredential(client_id, authority, scopes, token_cache)
@@ -43,9 +43,9 @@ credential = OsduMsalInteractiveCredential(client_id, authority, scopes, token_c
 On-behalf-of flow using a middle-tier service principal
 
 ```python
-from osdu.identity import OsduMsalOnBehalfOf, OsduMsalDeviceCode
-interactive_client = OsduMsalDeviceCode(<CLIENT_ID>,"https://login.microsoftonline.com/{TENANT_ID}","{CLIENT_ID}/.default","./cache")
-obo_client = OsduMsalOnBehalfOf(interactive_client,<CLIENT_SECRET>,<OSDU_RESOURCE_ID>)
+from osdu.identity import OsduMsalOnBehalfOfCredential, OsduMsalDeviceCodeCredential
+interactive_client = OsduMsalDeviceCodeCredential(<CLIENT_ID>,"https://login.microsoftonline.com/{TENANT_ID}","{CLIENT_ID}/.default","./cache")
+obo_client = OsduMsalOnBehalfOfCredential(interactive_client,<CLIENT_SECRET>,<OSDU_RESOURCE_ID>)
 obo_client.get_token()
 
 ```

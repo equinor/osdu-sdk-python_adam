@@ -196,7 +196,7 @@ class OsduMsalInteractiveCredential(OsduMsalInteractiveCredentialBase):
         )
 
 
-class OsduMsalDeviceCode(OsduMsalInteractiveCredentialBase):
+class OsduMsalDeviceCodeCredential(OsduMsalInteractiveCredentialBase):
     """MSAL Interactive device code flow."""
 
     def _auth_flow(self, app) -> dict:
@@ -210,12 +210,12 @@ class OsduMsalDeviceCode(OsduMsalInteractiveCredentialBase):
         return app.acquire_token_by_device_flow(flow)
 
 
-class OsduMsalOnBehalfOf(OsduBaseCredential):
+class OsduMsalOnBehalfOfCredential(OsduBaseCredential):
     """MSAL on-behalf-of flow."""
     # pylint: disable=too-many-arguments
 
     def __init__(
-            self, interactive_client: OsduMsalInteractiveCredential | OsduMsalDeviceCode,
+            self, interactive_client: OsduMsalInteractiveCredential | OsduMsalDeviceCodeCredential,
             client_secret: str, osdu_resource_id: str):
         """Setup the new client
 
